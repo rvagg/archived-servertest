@@ -234,3 +234,39 @@ test('uppercasing duplex server', function (t) {
     t.end()
   }))
 })
+
+test('json shorthand', function(t) {
+  var testObj = {
+      date : new Date().toISOString()
+    , num  : 101
+    , str  : 'a string'
+    , obj  : { x: 1 }
+  }
+
+  var server = http.createServer(function (req, res) {
+    res.end(JSON.stringify(testObj))
+  })
+
+  servertest.json(server, '/', function (err, res) {
+    t.ifError(err, 'no error')
+    t.deepEqual(res.body, testObj, 'body content')
+    t.end()
+  })
+})
+
+test('json shorthand with different encoding', function(t) {
+  var server = http.createServer(function (req, res) {
+    t.equal(req.method, 'GET', 'correct method (GET)')
+    t.equal(req.url, '/', 'correct url')
+    res.end('OK')
+  })
+
+  servertest.json(server, '/', { encoding: 'utf8' }, function (err, res) {
+    t.ifError(err, 'no error')
+
+    t.equal(res.statusCode, 200, 'statusCode')
+    t.equal(typeof res.body, 'string', 'body is string')
+    t.equal(res.body.toString(), 'OK', 'body content')
+    t.end()
+  })
+})
