@@ -86,3 +86,18 @@ function servertest (server, uri, options, callback) {
 
 
 module.exports = servertest
+
+module.exports.json = function(server, uri, options, callback) {
+  if (typeof options == 'function') {
+    callback = options
+    options  = {}
+  }
+
+  if (!options)
+    options = {}
+
+  if (!options.encoding)
+    options.encoding = 'json'
+
+  return servertest(server, uri, options, callback)
+}
