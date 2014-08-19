@@ -1,5 +1,7 @@
 const test       = require('tape')
     , http       = require('http')
+    , https      = require('https')
+    , path       = require('path')
     , fs         = require('fs')
     , crypto     = require('crypto')
     , bl         = require('bl')
@@ -175,6 +177,29 @@ test('statusCode', function (t) {
     t.equal(res.statusCode, 404, 'statusCode')
     t.ok(Buffer.isBuffer(res.body), 'body is buffer')
     t.equal(res.body.toString(), 'not found', 'body content')
+    t.end()
+  })
+})
+
+
+test('secure text/plain root server', function (t) {
+  var options = {
+    key: fs.readFileSync(path.join(__dirname, 'ssl', 'test.key')),
+    cert: fs.readFileSync(path.join(__dirname, 'ssl', 'test.crt'))
+  }
+
+  var server = https.createServer(options, function (req, res) {
+    t.equal(req.method, 'GET', 'correct method (GET)')
+    t.equal(req.url, '/', 'correct url')
+    res.end('OK')
+  })
+
+  servertest(server, '/', function (err, res) {
+    t.ifError(err, 'no error')
+
+    t.equal(res.statusCode, 200, 'statusCode')
+    t.ok(Buffer.isBuffer(res.body), 'body is buffer')
+    t.equal(res.body.toString(), 'OK', 'body content')
     t.end()
   })
 })
