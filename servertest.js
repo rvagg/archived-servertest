@@ -26,7 +26,8 @@ function servertest (server, uri, options, callback) {
     , outstream = through2()
     , stream    = duplexer(instream, outstream)
 
-  server.listen(0, function (err) {
+  // save reference to returned server in case of express
+  var _server = server.listen(0, function (err) {
     if (err)
       return onReturn(err)
 
@@ -68,7 +69,13 @@ function servertest (server, uri, options, callback) {
 
     instream.pipe(req)
     req.on('response', onResponse)
-    req.on('end', server.close.bind(server))
+
+    // if express, use http server returned from .listen
+    if (server.close) {
+      req.on('end', server.close.bind(server))
+    } else {
+      req.on('end', _server.close.bind(_server))
+    }
   }).on('error', function (err) {
     return onReturn(e)
   })
