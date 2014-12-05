@@ -25,7 +25,6 @@ function servertest (server, uri, options, callback) {
   var instream  = through2()
     , outstream = through2()
     , stream    = duplexer(instream, outstream)
-    , resp      = {}
 
   server.listen(0, function (err) {
     if (err)
@@ -33,6 +32,7 @@ function servertest (server, uri, options, callback) {
 
     var port = this.address().port
       , url = 'http://localhost:' + port + uri
+      , resp = {}
       , req
 
     function onResponse (res) {
@@ -47,7 +47,7 @@ function servertest (server, uri, options, callback) {
 
     function onEnd (err, data) {
       if (err)
-        return onReturn(err)
+        return onReturn(err, resp)
 
       if (options.encoding == 'utf8')
         resp.body = data.toString('utf8')
@@ -56,7 +56,7 @@ function servertest (server, uri, options, callback) {
           resp.body = JSON.parse(data.toString('utf8'))
         } catch (e) {
           resp.body = data.toString('utf8')
-          return onReturn(e)
+          return onReturn(e, resp)
         }
       } else
         resp.body = data.slice()
@@ -76,7 +76,7 @@ function servertest (server, uri, options, callback) {
     })
   }).on('error', onReturn)
 
-  function onReturn (err) {
+  function onReturn (err, resp) {
     if (!callback || typeof callback != 'function')
       throw err
     callback(err, resp)
