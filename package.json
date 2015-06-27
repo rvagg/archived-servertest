@@ -13,19 +13,19 @@
     "url": "https://github.com/rvagg/servertest.git"
   },
   "keywords": [
+    "api",
+    "bolognese",
     "http",
     "test",
-    "testing",
-    "api",
-    "bolognese"
+    "testing"
   ],
   "dependencies": {
-    "bl": ">=0.9.0 <0.10.0-0",
-    "hyperquest": ">=0.3.0 <0.4.0-0",
-    "reduplexer": ">=0.0.6 <0.1.0-0",
-    "through2": ">=0.6.1 <0.7.0-0"
+    "bl": "~1.0.0",
+    "hyperquest": "~1.2.0",
+    "reduplexer": "~1.1.0",
+    "through2": "~2.0.0"
   },
   "devDependencies": {
-    "tape": ">=2.14.0 <2.15.0-0"
+    "tape": "~2.14.0"
   }
 }
