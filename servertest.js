@@ -31,7 +31,8 @@ function servertest (server, uri, options, callback) {
       return onReturn(err)
 
     var port = this.address().port
-      , url = 'http://localhost:' + port + uri
+      , protocol = server instanceof require('https').Server ? 'https' : 'http'
+      , url = protocol + '://localhost:' + port + uri
       , resp = {}
       , req
 
