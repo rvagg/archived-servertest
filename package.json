@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "bl": "~1.0.0",
-    "hyperquest": "~1.2.0",
+    "hyperquest": "^2.1.2",
     "reduplexer": "~1.1.0",
     "through2": "~2.0.0"
   },
