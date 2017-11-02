@@ -22,6 +22,8 @@ function servertest (server, uri, options, callback) {
   if (options.encoding == 'json' && !options.headers['accept'])
       options.headers['accept'] = 'application/json'
 
+  options.timeout = options.timeout || Math.pow(2, 31) - 1
+
   var instream  = through2()
     , outstream = through2()
     , stream    = duplexer(instream, outstream)
